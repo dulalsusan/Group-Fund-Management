@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Client information · Group Savings{% endblock %}
+{% block content %}
+<section class="panel narrow-panel">
+  <span class="eyebrow">Client information</span>
+  <h1>Group Savings Fund</h1>
+  <p class="muted">This is the Group Savings Fund information page. Member accounts are required to access private fund balances and member services.</p>
+  <div class="summary-row"><span>Contact</span><strong><a href="tel:{{ contact_phone }}">{{ contact_phone }}</a></strong></div>
+</section>
+{% endblock %}

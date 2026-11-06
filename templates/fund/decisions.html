@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% load fund_tags %}
+{% block title %}Group decisions · Group Savings{% endblock %}
+{% block content %}
+<section class="page-heading"><div><span class="eyebrow">One member, one vote</span><h1>Governance & decisions</h1><p class="muted">Loan approvals require two-thirds consent. Emergency payouts and investments require unanimity.</p></div></section>
+<div class="dashboard-grid governance-grid"><section class="panel"><div class="section-heading"><h2>Decision register</h2></div>{% for decision in decisions %}<a class="decision-row" href="{% url 'decision_detail' decision.pk %}"><span><strong>{{ decision.title }}</strong><small>{{ decision.get_category_display }} · {{ decision.created_at|bs_date }} · {{ decision.votes.count }} vote{{ decision.votes.count|pluralize }}</small></span><span class="status status-{{ decision.status }}">{{ decision.get_status_display }}</span></a>{% empty %}<p class="empty-state">No group decisions have been proposed.</p>{% endfor %}</section>
+<section class="panel"><span class="eyebrow">Submit a proposal</span><h2>Put an idea to the group</h2><form method="post" class="stack-form">{% csrf_token %}{{ form.as_p }}<button class="button button-primary" type="submit">Create decision</button></form></section></div>
+{% endblock %}

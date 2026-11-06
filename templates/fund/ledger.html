@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% load fund_tags %}
+{% block title %}Shared ledger · Group Savings{% endblock %}
+{% block content %}
+<section class="page-heading"><div><span class="eyebrow">24-hour transparency</span><h1>Shared ledger</h1><p class="muted">Every fund transaction, recorded for all members.</p></div></section>
+<section class="panel table-panel"><div class="table-wrap"><table><thead><tr><th>Date</th><th>Transaction</th><th>Member</th><th>Reference</th><th>Fund impact</th><th>Cash impact</th></tr></thead><tbody>
+{% for entry in entries %}<tr><td>{{ entry.created_at|bs_date }}</td><td><strong>{{ entry.get_entry_type_display }}</strong><small class="table-sub">{{ entry.description }}</small></td><td>{{ entry.member|default:"—" }}</td><td>{{ entry.reference|default:"—" }}</td><td class="{% if entry.fund_delta < 0 %}amount-out{% else %}amount-in{% endif %}">NPR {{ entry.fund_delta|floatformat:2 }}</td><td class="{% if entry.cash_delta < 0 %}amount-out{% else %}amount-in{% endif %}">NPR {{ entry.cash_delta|floatformat:2 }}</td></tr>
+{% empty %}<tr><td colspan="6" class="empty-state">The ledger is ready for its first transaction.</td></tr>{% endfor %}
+</tbody></table></div><p class="table-note">Showing the latest 250 entries. Loan principal disbursements and repayments move between cash and receivables and do not change the fund total.</p></section>
+{% endblock %}

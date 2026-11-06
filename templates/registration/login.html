@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Sign in · Group Savings{% endblock %}
+{% block content %}
+<section class="auth-wrap">
+  <div class="auth-aside">
+    <span class="eyebrow">Together, with transparency</span>
+    <h1>Every contribution builds a stronger future.</h1>
+    <p>A shared, auditable space for member contributions, loans, and group decisions.</p>
+  </div>
+  <div class="panel auth-panel">
+    <h2>Welcome back</h2>
+    <p class="muted">Sign in to your group account.</p>
+    <form method="post">{% csrf_token %}{{ form.as_p }}<button class="button button-primary full-width" type="submit">Sign in</button></form>
+    <p class="form-foot">Not a member yet? <a href="{% url 'register' %}">Request to join</a></p>
+  </div>
+</section>
+{% endblock %}

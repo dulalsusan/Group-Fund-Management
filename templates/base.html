@@ -1,0 +1,61 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Transparent group savings, contribution, and loan management">
+  <title>{% block title %}Group Savings Fund{% endblock %}</title>
+  <link rel="stylesheet" href="{% static 'fund/styles.css' %}">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="{% if not user.is_authenticated %}{% url 'login' %}{% elif user.is_superuser and current_member and current_member.role == 'admin' %}{% url 'dashboard' %}{% elif user.is_superuser %}{% url 'admin:index' %}{% elif current_member and current_member.role == 'client' %}{% url 'client_overview' %}{% elif current_member and current_member.is_active_member %}{% url 'dashboard' %}{% else %}{% url 'pending' %}{% endif %}">
+      <span class="brand-mark">GS</span>
+      <span>Group Savings<span class="brand-sub">Shared fund · Shared trust</span></span>
+    </a>
+    {% if user.is_authenticated %}
+      <nav class="main-nav" aria-label="Main navigation">
+        {% if user.is_superuser %}
+          <a href="{% url 'admin:index' %}">Administration</a>
+          {% if current_member and current_member.role == 'admin' %}
+            <a href="{% url 'dashboard' %}">Fund overview</a>
+            <a href="{% url 'contributions' %}">Contributions</a>
+            <a href="{% url 'loans' %}">Loans</a>
+            <a href="{% url 'decisions' %}">Governance</a>
+            <a href="{% url 'ledger' %}">Ledger</a>
+            <a href="{% url 'documents' %}">Documents</a>
+          {% endif %}
+        {% elif current_member and current_member.role == 'client' %}
+          <a href="{% url 'client_overview' %}">Information</a>
+        {% elif current_member and current_member.is_active_member %}
+          <a href="{% url 'dashboard' %}">Overview</a>
+          <a href="{% url 'contributions' %}">Contributions</a>
+          <a href="{% url 'loans' %}">Loans</a>
+          <a href="{% url 'decisions' %}">Governance</a>
+          <a href="{% url 'ledger' %}">Ledger</a>
+          <a href="{% url 'documents' %}">Documents</a>
+          <a href="{% url 'exit_request' %}">Exit</a>
+        {% else %}
+          <a href="{% url 'pending' %}">Membership status</a>
+        {% endif %}
+      </nav>
+      <div class="user-menu">
+        <span>{{ user.get_full_name|default:user.username }}</span>
+        <form method="post" action="{% url 'logout' %}">{% csrf_token %}<button class="link-button" type="submit">Sign out</button></form>
+      </div>
+    {% else %}
+      <div class="user-menu"><a href="{% url 'login' %}">Sign in</a><a class="button button-small" href="{% url 'register' %}">Join group</a></div>
+    {% endif %}
+  </header>
+  <main class="page-shell">
+    {% if messages %}
+      <div class="messages" role="status">
+        {% for message in messages %}<div class="message message-{{ message.tags }}">{{ message }}</div>{% endfor %}
+      </div>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+  <footer class="footer">Private group workspace · All amounts in Nepalese rupees (NPR)</footer>
+</body>
+</html>

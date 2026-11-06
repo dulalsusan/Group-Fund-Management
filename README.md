@@ -26,16 +26,15 @@ The rule book specifies Bikram Sambat. Contribution periods, due dates, grace pe
    python manage.py runserver
    ```
 
-5. Open <http://127.0.0.1:8000/admin/> and create the initial `Member profile`. Choose a user, set their role to **Account maintainer** or **Excel maintainer**, set status to **Active**, set the joining date, and select designated bank signatories. Create a `Fund settings` record to enter any verified opening fund and bank cash balance. Do not enter the same starting balance as both an opening adjustment and ledger transactions.
+5. Open <http://127.0.0.1:8000/admin/> and sign in with the superuser. In **Member profiles**, create a profile for the superuser and choose **Admin** to enable the full fund workspace. Approve member sign-ups by setting their profile status to **Active** and filling in their joining date. To create a Client, add a user under **Users**, then create a linked **Member profile** and choose **Client**. Clients can sign in to view the Group Savings Fund contact information; they cannot access member balances or records. Create a `Fund settings` record to enter any verified opening fund and bank cash balance. Do not enter the same starting balance as both an opening adjustment and ledger transactions.
 
-Members may register at `/register/`. Their membership remains pending until active members unanimously approve the membership decision. The first active member must be activated by an administrator.
+Members may register at `/register/`. Their membership remains pending until an administrator activates it. Client accounts are created by an administrator.
 
 ## Roles
 
-- **Standard member:** shared ledger, own contribution proof, votes, loan requests, shared documents, and exit requests.
-- **Account maintainer (treasurer):** uploads monthly bank statements, disburses approved loans, records approved cash transactions, and approves exit payouts.
-- **Excel maintainer (bookkeeper):** verifies contributions and loan repayments, uploads monthly summaries and quarterly reconciliations, and maintains the loan register.
-- **Django administrator:** initial setup and account/role administration. Use this account only for system administration; group votes and recorded transactions remain the normal financial workflow.
+- **Admin:** Django superuser with full administration access, including creating/deleting users and approving Member profiles. Use `/admin/`.
+- **Member:** signs up for administrator approval, sees the fund dashboard and member services, and can submit their own payment proof, vote, request loans, and manage their exit request. Financial verification and recording actions are restricted to Admin.
+- **Client:** administrator-created account that can view the general Group Savings Fund information and contact number only. Clients cannot see member fund balances, records, or documents.
 
 ## Monthly operation
 
@@ -51,17 +50,17 @@ Run the reminder task daily as well. It emails members on the 10th and 20th of e
 python manage.py send_contribution_reminders
 ```
 
-The account maintainer uploads the official bank statement for the current month in **Documents**. The bookkeeper uploads monthly summaries and quarter-start reconciliations. Uploads are available only to signed-in active members or authorized maintainers. Members can print an HTML receipt after their contribution is verified. The supplied rule book is also available in the authenticated **Documents** area.
+Administrators use the fund workspace to review contributions, record repayments and disbursements, and upload official statements and summaries. Members can print an HTML receipt after their contribution is verified. The supplied rule book is available in the authenticated **Documents** area.
 
 ## Financial rules implemented
 
 - NPR 5,000 monthly contribution, due on the 10th of each B.S. month with a grace period through the 20th.
 - Total fund and bank-cash balances are tracked separately. Loans are assets: disbursement and principal repayment move cash without incorrectly changing fund equity. Interest, penalties, and loan charges increase the fund; payouts and administrative expenses reduce it.
 - The lendable pool is capped at 80% of total fund. Free cash is the lesser of unused lendable capacity and bank cash above the 20% reserve.
-- Loan requests require one active loan maximum, a NPR 5,000 minimum, a 50% normal / 60% emergency pool limit, and a two-thirds member vote excluding the applicant. The vote also meets the two-thirds transfer-consent threshold before a treasurer can disburse.
+- Loan requests require one active loan maximum, a NPR 5,000 minimum, a 50% normal / 60% emergency pool limit, and a two-thirds member vote excluding the applicant. The vote also meets the two-thirds transfer-consent threshold before an administrator can disburse.
 - A second designated bank signatory must independently confirm withdrawals and loan transfers. Loan disbursements may be partial, deduct NPR 100 service charge and (when applicable) NPR 10 transaction charge, and accrue 0.5% monthly interest against outstanding principal.
 - Past-term loan interest follows the rule book's 8% rate after the one-year term and grace period, increasing one percentage point for each additional year.
-- Emergency payouts and investment proposals need unanimous approval. Member additions require unanimous approval. Vote thresholds use eligible active members, not meeting attendance.
+- Emergency payouts and investment proposals need unanimous approval. Administrators approve new Member accounts. Vote thresholds use eligible active members, not meeting attendance.
 - Catch-up contributions, first-six-month loan restrictions, exit notices, and exit payout estimates are recorded.
 
 ## Security and deployment

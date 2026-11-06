@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% load fund_tags %}
+{% block title %}Member exit · Group Savings{% endblock %}
+{% block content %}
+<section class="page-heading"><div><span class="eyebrow">Membership</span><h1>Exit request</h1><p class="muted">At least 30 days' written notice is required before an exit payout can be considered.</p></div></section>
+<div class="form-layout"><section class="panel"><h2>Estimated payout</h2><p class="payout-number">NPR {{ payout|floatformat:2 }}</p><p class="muted">Includes contributions, and after three years 80% of attributable profit, less recorded liabilities and penalties. Final payment is subject to member approval and fund liquidity.</p></section><section class="panel form-panel">
+{% if exit_request and exit_request.status == "paid" %}<p>Your exit payout has been completed.</p>
+{% elif exit_request %}<h2>Notice status</h2><p>{{ exit_request.get_status_display }}</p><p class="muted">Notice date: {{ exit_request.notice_date|bs_date }}</p>{% if notice_ready and exit_request.status == "notice" %}<form method="post">{% csrf_token %}{{ form.as_p }}<button class="button button-primary" type="submit">Request exit payout vote</button></form>{% endif %}
+{% else %}<h2>Start your notice period</h2><form method="post">{% csrf_token %}{{ form.as_p }}<button class="button button-primary" type="submit">Submit written notice</button></form>{% endif %}
+</section></div>
+{% endblock %}

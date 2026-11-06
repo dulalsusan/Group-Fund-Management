@@ -1,0 +1,2 @@
+Django>=5.2,<6.0
+nepali-datetime==1.0.8.5

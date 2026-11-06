@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load fund_tags %}
+{% block title %}Fund overview · Group Savings{% endblock %}
+{% block content %}
+<section class="welcome-row">
+  <div><span class="eyebrow">Fund overview · {{ current_period|bs_month }} (B.S.)</span><h1>Good to see you, {{ user.first_name|default:user.username }}.</h1><p class="muted">A clear view of your shared savings and today's available balance.</p></div>
+  {% if not user.is_superuser %}<div class="welcome-actions"><a class="button button-primary" href="{% url 'request_loan' %}">Apply for a loan</a><a class="button button-quiet" href="{% url 'decisions' %}">Group decisions{% if open_decisions %} <span class="count">{{ open_decisions }}</span>{% endif %}</a></div>{% endif %}
+</section>
+{% if bank_statement_missing %}<div class="notice notice-warning"><strong>Monthly statement due.</strong> The bank statement for {{ current_period|bs_month }} (B.S.) is not yet shared. Please contact an administrator. <a href="{% url 'documents' %}">View documents</a></div>{% endif %}
+<section class="metric-grid">
+  <article class="metric-card metric-primary"><span>Total fund</span><strong>NPR {{ snapshot.total_fund|floatformat:2 }}</strong><small>Contributions, retained earnings, fees and penalties</small></article>
+  <article class="metric-card"><span>Lendable pool <i>80% cap</i></span><strong>NPR {{ snapshot.lendable_pool|floatformat:2 }}</strong><small>Maximum available for member loans</small></article>
+  <article class="metric-card"><span>Free cash</span><strong>NPR {{ snapshot.free_cash|floatformat:2 }}</strong><small>After loans and the 20% bank reserve</small></article>
+  <article class="metric-card"><span>Bank cash</span><strong>NPR {{ snapshot.bank_cash|floatformat:2 }}</strong><small>Protected reserve: NPR {{ snapshot.reserve|floatformat:2 }}</small></article>
+</section>
+<div class="dashboard-grid">
+  {% if not user.is_superuser %}<section class="panel">
+    <div class="section-heading"><div><span class="eyebrow">Your monthly saving</span><h2>{{ current_period|bs_month }} (B.S.)</h2></div><a href="{% url 'contributions' %}">All contributions →</a></div>
+    {% if contribution %}
+      <div class="summary-row"><span>Required contribution</span><strong>NPR {{ contribution.amount|floatformat:2 }}</strong></div>
+      <div class="summary-row"><span>Due date</span><strong>10 {{ current_period|bs_month }} (B.S.)</strong></div>
+      <div class="summary-row"><span>Payment status</span><span class="status status-{{ contribution.status }}">{{ contribution.get_status_display }}</span></div>
+      {% if contribution.status == "verified" %}<p class="form-foot"><a href="{% url 'contribution_receipt' contribution.pk %}">View or print your payment receipt</a></p>{% endif %}
+      {% if contribution.status != "verified" %}
+        <form method="post" enctype="multipart/form-data" action="{% url 'submit_contribution_proof' contribution.pk %}" class="stack-form">{% csrf_token %}
+          <label for="id_proof_{{ contribution.pk }}">Payment screenshot</label><input id="id_proof_{{ contribution.pk }}" type="file" name="proof" accept=".pdf,.png,.jpg,.jpeg">
+          <label for="id_ref_{{ contribution.pk }}">Transaction reference (either proof or reference is required)</label><input id="id_ref_{{ contribution.pk }}" type="text" name="transaction_reference" placeholder="Transaction ID">
+          <button class="button button-primary" type="submit">Submit payment proof</button>
+        </form>
+      {% endif %}
+    {% else %}<p class="muted">A contribution schedule will appear here once your membership is active.</p>{% endif %}
+    {% if member_loan %}<div class="loan-callout"><span class="eyebrow">Active loan</span><strong>NPR {{ member_loan.outstanding_principal|floatformat:2 }} outstanding</strong><a href="{% url 'loans' %}">View repayment details</a></div>{% endif %}
+  </section>{% endif %}
+  <section class="panel">
+    <div class="section-heading"><div><span class="eyebrow">Group transparency</span><h2>Fund activity</h2></div><a href="{% url 'ledger' %}">Full ledger →</a></div>
+    {% for entry in latest_entries %}
+      <div class="activity-row"><span class="activity-dot activity-{{ entry.entry_type }}"></span><div class="activity-copy"><strong>{{ entry.description }}</strong><small>{{ entry.created_at|bs_datetime }}{% if entry.member %} · {{ entry.member }}{% endif %}</small></div><span class="{% if entry.cash_delta < 0 %}amount-out{% else %}amount-in{% endif %}">{% if entry.cash_delta < 0 %}−{% else %}+{% endif %}{{ entry.amount|floatformat:2 }}</span></div>
+    {% empty %}<p class="empty-state">No transactions recorded yet.</p>{% endfor %}
+  </section>
+</div>
+<section class="quick-links">
+  <a href="{% url 'loans' %}"><span class="quick-icon">01</span><span><strong>Loan register</strong><small>Applications, approvals and repayments</small></span><b>→</b></a>
+  <a href="{% url 'decisions' %}"><span class="quick-icon">02</span><span><strong>Member decisions</strong><small>Vote and review meeting records</small></span><b>→</b></a>
+  <a href="{% url 'documents' %}"><span class="quick-icon">03</span><span><strong>Shared documents</strong><small>Statements, reports and minutes</small></span><b>→</b></a>
+</section>
+{% endblock %}

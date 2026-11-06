@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% load fund_tags %}
+{% block title %}Shared documents · Group Savings{% endblock %}
+{% block content %}
+<section class="page-heading"><div><span class="eyebrow">Statements · reports · minutes</span><h1>Shared documents</h1><p class="muted">Documents are visible only to signed-in active members. <a href="{% url 'rulebook' %}" target="_blank" rel="noopener">Open the Group Rule Book ↗</a></p></div></section>
+<div class="dashboard-grid"><section class="panel"><h2>Document library</h2>{% for document in documents %}<a class="document-row" href="{% url 'private_file' 'shared' document.pk %}" target="_blank" rel="noopener"><span class="document-icon">PDF</span><span><strong>{{ document.title }}</strong><small>{{ document.get_category_display }}{% if document.reporting_period %} · {{ document.reporting_period|bs_month }} B.S.{% endif %} · {{ document.uploaded_at|bs_date }}</small>{% if document.notes %}<small>{{ document.notes }}</small>{% endif %}</span><b>↗</b></a>{% empty %}<p class="empty-state">No shared documents have been uploaded.</p>{% endfor %}</section>
+<section class="panel form-panel"><span class="eyebrow">Maintainer uploads</span><h2>Share a document</h2><p class="muted">Bank statements are due on the 10th. Bookkeepers upload monthly summaries and quarterly reconciliations.</p><form method="post" enctype="multipart/form-data" class="stack-form">{% csrf_token %}{{ form.as_p }}<button class="button button-primary" type="submit">Upload document</button></form></section></div>
+{% endblock %}

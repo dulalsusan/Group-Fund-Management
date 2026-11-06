@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Apply for a loan · Group Savings{% endblock %}
+{% block content %}
+<section class="page-heading"><div><span class="eyebrow">Member loan application</span><h1>Request a loan</h1><p class="muted">Minimum NPR 5,000. Approval needs two-thirds member consent. Repayment is due within one year.</p></div></section>
+<div class="form-layout"><section class="panel form-panel"><form method="post" class="stack-form">{% csrf_token %}{{ form.as_p }}<button class="button button-primary" type="submit">Submit for group vote</button></form></section><aside class="panel rule-panel"><h3>Before you apply</h3><ul><li>Only one active loan per member.</li><li>Normal requests are capped at 50% of the lendable pool; emergency requests at 60%.</li><li>New members are limited to 80% of their own contributions during their first six months.</li><li>Interest is 0.5% per month on the outstanding principal.</li><li>Make sure the repayments are affordable alongside monthly contributions.</li></ul></aside></div>
+{% endblock %}

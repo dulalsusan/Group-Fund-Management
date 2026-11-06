@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load fund_tags %}
+{% block title %}Contribution receipt · Group Savings{% endblock %}
+{% block content %}
+<section class="receipt panel">
+  <div class="receipt-header"><span class="brand-mark">GS</span><div><span class="eyebrow">Official payment receipt</span><h1>Group Savings Fund</h1></div></div>
+  <p class="receipt-number">Receipt #{{ contribution.pk|stringformat:"06d" }}</p>
+  <div class="receipt-details">
+    <div><span>Received from</span><strong>{{ contribution.member }}</strong></div>
+    <div><span>Contribution period</span><strong>{{ contribution.period|bs_month }} B.S.</strong></div>
+    <div><span>Amount received</span><strong>NPR {{ contribution.amount|floatformat:2 }}</strong></div>
+    <div><span>Payment verified on</span><strong>{{ contribution.verified_at|bs_date }}</strong></div>
+    {% if contribution.transaction_reference %}<div><span>Transaction reference</span><strong>{{ contribution.transaction_reference }}</strong></div>{% endif %}
+    <div><span>Verified by</span><strong>{{ contribution.verified_by.get_full_name|default:contribution.verified_by.username }}</strong></div>
+  </div>
+  <p class="receipt-thanks">This receipt confirms that the contribution has been verified and entered in the shared fund ledger.</p>
+  <button class="button button-primary no-print" type="button" onclick="window.print()">Print receipt</button>
+</section>
+{% endblock %}

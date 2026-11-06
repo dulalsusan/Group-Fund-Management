@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Request membership · Group Savings{% endblock %}
+{% block content %}
+<section class="auth-wrap">
+  <div class="auth-aside"><span class="eyebrow">Membership onboarding</span><h1>Join a group that saves with purpose.</h1><p>New membership requests require administrator approval.</p></div>
+  <div class="panel auth-panel">
+    <h2>Create your account</h2>
+    <p class="muted">Your account stays pending until the group approves your membership.</p>
+    <form method="post">{% csrf_token %}{{ form.as_p }}<button class="button button-primary full-width" type="submit">Request membership</button></form>
+    <p class="form-foot">Already registered? <a href="{% url 'login' %}">Sign in</a></p>
+  </div>
+</section>
+{% endblock %}

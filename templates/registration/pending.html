@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Membership status · Group Savings{% endblock %}
+{% block content %}
+<section class="panel narrow-panel">
+  <span class="eyebrow">Membership onboarding</span>
+  <h1>Your membership is awaiting approval</h1>
+  <p class="muted">Group access becomes available after an administrator approves your membership request.</p>
+  {% if user.is_staff %}<p><a class="button button-primary" href="/admin/">Open administration</a></p>{% endif %}
+</section>
+{% endblock %}
