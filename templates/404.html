@@ -1,3 +1,14 @@
 {% extends "base.html" %}
-{% block title %}Not found · Group Savings{% endblock %}
-{% block content %}<section class="panel narrow-panel"><span class="eyebrow">404</span><h1>This page is not available</h1><p class="muted">The page may have moved or you may not have permission to view it.</p><a class="button button-primary" href="{% url 'dashboard' %}">Return to overview</a></section>{% endblock %}
+{% block title %}404 · Page not found · Group Savings{% endblock %}
+{% block content %}
+  <section class="panel narrow-panel" aria-labelledby="not-found-title">
+    <span class="eyebrow">Error 404</span>
+    <h1 id="not-found-title">Page not found</h1>
+    <p class="muted">We couldn’t find the page you’re looking for. It may have moved, or the address may be incorrect.</p>
+    {% if user.is_authenticated %}
+      <a class="button button-primary" href="{% url 'post_login' %}">Return to your overview</a>
+    {% else %}
+      <a class="button button-primary" href="{% url 'login' %}">Sign in</a>
+    {% endif %}
+  </section>
+{% endblock %}
