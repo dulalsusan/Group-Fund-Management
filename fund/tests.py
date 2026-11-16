@@ -128,6 +128,14 @@ class FundWorkflowTests(TestCase):
             role=MemberProfile.Role.ADMIN,
             status=MemberProfile.Status.ACTIVE,
         )
+        self.assertRedirects(
+            self.client.get(reverse("post_login")),
+            reverse("dashboard"),
+            fetch_redirect_response=False,
+        )
+        dashboard = self.client.get(reverse("dashboard"))
+        self.assertEqual(dashboard.status_code, 200)
+        self.assertNotContains(dashboard, "Administration")
         for url_name in ("dashboard", "contributions", "loans", "documents"):
             with self.subTest(page=url_name):
                 self.assertEqual(self.client.get(reverse(url_name)).status_code, 200)

@@ -17,7 +17,6 @@
     {% if user.is_authenticated %}
       <nav class="main-nav" aria-label="Main navigation">
         {% if user.is_superuser %}
-          <a href="{% url 'admin:index' %}">Administration</a>
           {% if current_member and current_member.role == 'admin' %}
             <a href="{% url 'dashboard' %}">Fund overview</a>
             <a href="{% url 'contributions' %}">Contributions</a>
