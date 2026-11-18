@@ -1,10 +1,47 @@
 {% extends "base.html" %}
 {% block title %}Membership status · Group Savings{% endblock %}
 {% block content %}
-<section class="panel narrow-panel">
-  <span class="eyebrow">Membership onboarding</span>
-  <h1>Your membership is awaiting approval</h1>
-  <p class="muted">Group access becomes available after an administrator approves your membership request.</p>
-  {% if user.is_staff %}<p><a class="button button-primary" href="/admin/">Open administration</a></p>{% endif %}
+<section class="pending-page" aria-labelledby="pending-title">
+  <div class="pending-card">
+    <div class="pending-status">
+      <span class="pending-icon" aria-hidden="true">
+        <span class="pending-clock"></span>
+      </span>
+      <span class="status status-pending">Pending approval</span>
+    </div>
+
+    <span class="eyebrow">Membership onboarding</span>
+    <h1 id="pending-title">Your request is being reviewed</h1>
+    <p class="pending-lead">We’ve received your membership request. An administrator will review your details before activating your account.</p>
+
+    <div class="pending-progress" aria-label="Membership progress">
+      <div class="progress-step progress-complete">
+        <span class="progress-dot" aria-hidden="true">✓</span>
+        <div><strong>Request submitted</strong><small>Your details are saved</small></div>
+      </div>
+      <span class="progress-line" aria-hidden="true"></span>
+      <div class="progress-step progress-active">
+        <span class="progress-dot" aria-hidden="true">2</span>
+        <div><strong>Administrator review</strong><small>Usually completed soon</small></div>
+      </div>
+      <span class="progress-line" aria-hidden="true"></span>
+      <div class="progress-step">
+        <span class="progress-dot" aria-hidden="true">3</span>
+        <div><strong>Member access</strong><small>View and manage your fund</small></div>
+      </div>
+    </div>
+
+    <div class="pending-footer">
+      <p><strong>What happens next?</strong> You’ll gain access to the group workspace once your membership is approved. No action is required right now.</p>
+      {% if user.is_staff %}
+        <a class="button button-primary" href="/admin/">Open administration <span aria-hidden="true">→</span></a>
+      {% else %}
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button class="button button-quiet" type="submit">Sign out</button>
+        </form>
+      {% endif %}
+    </div>
+  </div>
 </section>
 {% endblock %}
