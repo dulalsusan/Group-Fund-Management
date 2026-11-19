@@ -1,17 +1,67 @@
 {% extends "base.html" %}
 {% block title %}Sign in · Group Savings{% endblock %}
 {% block content %}
-<section class="auth-wrap">
-  <div class="auth-aside">
+<section class="auth-wrap login-wrap">
+  <div class="auth-aside login-aside">
     <span class="eyebrow">Together, with transparency</span>
-    <h1>Every contribution builds a stronger future.</h1>
+    <h1>Every contribution builds a <em>stronger future.</em></h1>
     <p>A shared, auditable space for member contributions, loans, and group decisions.</p>
+    <div class="login-trust" aria-label="Account benefits">
+      <div><strong>Secure</strong><span>Private member access</span></div>
+      <div><strong>Transparent</strong><span>Clear, shared records</span></div>
+    </div>
   </div>
-  <div class="panel auth-panel">
-    <h2>Welcome back</h2>
-    <p class="muted">Sign in to your group account.</p>
-    <form method="post">{% csrf_token %}{{ form.as_p }}<button class="button button-primary full-width" type="submit">Sign in</button></form>
+  <div class="panel auth-panel login-panel">
+    <div class="login-panel-heading">
+      <span class="login-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" role="img">
+          <path d="M12 2.75a4.25 4.25 0 0 1 4.25 4.25v2.25H7.75V7A4.25 4.25 0 0 1 12 2.75Zm6.25 6.5v2.25h-1.5V9.25H7.25v2.25h-1.5V9.25A2.5 2.5 0 0 1 8.25 6.75h7.5a2.5 2.5 0 0 1 2.5 2.5ZM5.75 10.5h12.5a2.25 2.25 0 0 1 2.25 2.25v6.5a2.25 2.25 0 0 1-2.25 2.25H5.75a2.25 2.25 0 0 1-2.25-2.25v-6.5a2.25 2.25 0 0 1 2.25-2.25Zm6.25 3a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Z"/>
+        </svg>
+      </span>
+      <div>
+        <h2>Welcome back</h2>
+        <p class="muted">Sign in to your group account</p>
+      </div>
+    </div>
+    <form method="post" class="login-form">
+      {% csrf_token %}
+      {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+      {% if form.non_field_errors %}
+        <div class="login-errors" role="alert">{{ form.non_field_errors }}</div>
+      {% endif %}
+      <div class="login-field">
+        <label for="{{ form.username.id_for_label }}">Username</label>
+        {{ form.username }}
+        {% if form.username.errors %}<div class="field-error">{{ form.username.errors }}</div>{% endif %}
+      </div>
+      <div class="login-field">
+        <div class="password-label">
+          <label for="{{ form.password.id_for_label }}">Password</label>
+        </div>
+        <div class="password-field">
+          {{ form.password }}
+          <button type="button" class="password-toggle" aria-label="Show password" aria-pressed="false">Show</button>
+        </div>
+        {% if form.password.errors %}<div class="field-error">{{ form.password.errors }}</div>{% endif %}
+      </div>
+      <button class="button button-primary full-width login-submit" type="submit">
+        <span>Sign in</span>
+        <span aria-hidden="true">→</span>
+      </button>
+    </form>
     <p class="form-foot">Not a member yet? <a href="{% url 'register' %}">Request to join</a></p>
   </div>
 </section>
+<script>
+  document.querySelectorAll(".password-toggle").forEach(function (button) {
+    button.addEventListener("click", function () {
+      var input = button.parentElement.querySelector("input");
+      var show = input.type === "password";
+      input.type = show ? "text" : "password";
+      button.textContent = show ? "Hide" : "Show";
+      button.setAttribute("aria-label", show ? "Hide password" : "Show password");
+      button.setAttribute("aria-pressed", show ? "true" : "false");
+    });
+  });
+</script>
 {% endblock %}

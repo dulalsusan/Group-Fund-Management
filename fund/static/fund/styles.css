@@ -155,6 +155,141 @@ hr { margin: 20px 0; border: 0; border-top: 1px solid var(--line); }
 .auth-panel { width: min(100%, 440px); padding: 34px; }
 .auth-panel h2 { font-size: 1.5rem; }
 .form-foot { margin: 20px 0 0; color: var(--muted); text-align: center; font-size: 12px; }
+
+.login-wrap {
+  position: relative;
+  min-height: calc(100vh - 230px);
+  gap: 6vw;
+}
+.login-aside {
+  position: relative;
+  max-width: 560px;
+  padding: 46px 0;
+}
+.login-aside h1 em {
+  display: block;
+  color: var(--green);
+  font-style: normal;
+}
+.login-aside::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 230px;
+  height: 230px;
+  left: -85px;
+  top: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(198 218 205 / 55%) 0, rgb(232 241 235 / 20%) 45%, transparent 70%);
+}
+.login-trust {
+  margin-top: 34px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  max-width: 430px;
+}
+.login-trust div {
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgb(255 255 255 / 72%);
+}
+.login-trust strong,
+.login-trust span { display: block; }
+.login-trust strong { margin-bottom: 2px; color: var(--ink); font-size: 12px; }
+.login-trust span { color: var(--muted); font-size: 11px; }
+.login-panel {
+  position: relative;
+  width: min(100%, 440px);
+  justify-self: end;
+  padding: 38px;
+  border-top: 4px solid var(--green);
+  border-radius: 14px;
+  box-shadow: 0 24px 60px rgb(34 58 45 / 12%);
+}
+.login-panel-heading {
+  margin-bottom: 26px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+.login-panel-heading h2 { margin: 0 0 3px; }
+.login-panel-heading .muted { margin: 0; font-size: 13px; }
+.login-icon {
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: var(--green-light);
+  color: var(--green);
+}
+.login-icon svg {
+  width: 23px;
+  height: 23px;
+  fill: currentColor;
+}
+.login-form {
+  display: grid;
+  gap: 18px;
+}
+.login-field { display: grid; gap: 7px; }
+.login-field input {
+  height: 48px;
+  padding: 11px 13px;
+  border-radius: 9px;
+  background: #fcfdfb;
+  font-size: 14px;
+}
+.login-field input:focus {
+  border-color: var(--green);
+  background: #fff;
+  outline: 3px solid rgb(189 213 197 / 65%);
+  box-shadow: none;
+}
+.password-field { position: relative; }
+.password-field input { padding-right: 66px; }
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  padding: 4px 6px;
+  border: 0;
+  background: transparent;
+  color: var(--green);
+  font: 700 11px "DM Sans", sans-serif;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+.login-errors,
+.field-error {
+  color: var(--red);
+  font-size: 12px;
+}
+.login-errors {
+  padding: 10px 12px;
+  border: 1px solid #f2d2ce;
+  border-radius: 8px;
+  background: #fdf1ef;
+}
+.login-errors ul,
+.field-error ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.login-submit {
+  min-height: 48px;
+  margin-top: 2px;
+  justify-content: space-between;
+  padding: 11px 18px;
+  border-radius: 9px;
+  font-size: 14px;
+  box-shadow: 0 8px 18px rgb(36 92 70 / 16%);
+}
+.login-submit span:last-child { font-size: 18px; line-height: 1; }
 .narrow-panel { max-width: 700px; margin: 8vh auto; padding: 36px; }
 .receipt { max-width: 680px; margin: 20px auto; padding: 38px; }
 .receipt-header { display: flex; align-items: center; gap: 14px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
@@ -342,5 +477,12 @@ hr { margin: 20px 0; border: 0; border-top: 1px solid var(--line); }
   .auth-wrap { gap: 18px; }
   .auth-aside h1 { font-size: 2.3rem; }
   .auth-panel { padding: 24px; }
+  .login-wrap { min-height: auto; }
+  .login-aside { padding: 20px 0 4px; }
+  .login-aside h1 { margin-bottom: 10px; }
+  .login-aside p { font-size: 14px; }
+  .login-trust { margin-top: 20px; }
+  .login-panel { width: 100%; justify-self: stretch; }
+  .login-panel-heading { margin-bottom: 22px; }
   .narrow-panel { margin: 2vh auto; padding: 24px; }
 }
